@@ -1,6 +1,7 @@
 package org.cakelab.jdoxml.api;
 
 import java.io.IOException;
+import java.util.ListIterator;
 
 import org.xml.sax.SAXException;
 
@@ -11,7 +12,7 @@ public interface IDoxygen
     /** Returns an iterator that can be used to iterate over the list
      *  of compounds found in the project.
      */
-    ICompoundIterator compounds();
+	ListIterator<ICompound> compounds();
 
     /** Returns a compound given its unique \a id. If you have a
      *  compound id this function is much more efficient than iterating
@@ -36,7 +37,7 @@ public interface IDoxygen
      *  list of members with that name.
      *  @param name The name of the member.
      */
-    ICompoundIterator memberByName(String name);
+    ListIterator<ICompound> memberByName(String name);
 
     /** Releases the memory for the object hierarchy obtained by 
      *  createdObjecModelFromXML(). First release all iterators before calling

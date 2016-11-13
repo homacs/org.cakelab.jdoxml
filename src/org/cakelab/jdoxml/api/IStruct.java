@@ -6,7 +6,7 @@ import java.util.ListIterator;
  */
 public interface IStruct extends ICompound
 {
-    ICompoundIterator nestedCompounds();
+	ListIterator<ICompound> nestedCompounds();
     ListIterator<IRelatedCompound> baseCompounds();
     ListIterator<IRelatedCompound> derivedCompounds();
     String locationFile();

@@ -1,11 +1,12 @@
 package org.cakelab.jdoxml.impl.mainhandler;
 
 import java.util.List;
+import java.util.ListIterator;
+
 import org.cakelab.jdoxml.api.ICompound;
-import org.cakelab.jdoxml.api.ICompoundIterator;
 import org.cakelab.jdoxml.impl.baseiterator.BaseIterator;
 
-public class CompoundEntryIterator implements ICompoundIterator {
+public class CompoundEntryIterator implements ListIterator<ICompound> {
 	private MainHandler m_mainHandler;
 	private BaseIterator<CompoundEntry> iterator;
 

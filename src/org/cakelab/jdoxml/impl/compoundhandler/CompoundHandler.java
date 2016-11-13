@@ -324,12 +324,14 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 			return false;
 		CompoundErrorHandler errorHandler = new CompoundErrorHandler();
 
-		InputSource source = new InputSource(new FileInputStream(xmlFile));
+		FileInputStream byteStream = new FileInputStream(xmlFile);
+		InputSource source = new InputSource(byteStream);
 
 		XMLReader reader = XMLReaderFactory.createXMLReader();
 		reader.setContentHandler(this);
 		reader.setErrorHandler(errorHandler);
 		reader.parse(source);
+		byteStream.close();
 		return true;
 	}
 
@@ -464,7 +466,7 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		return m_subClasses.listIterator();
 	}
 
-	public ICompoundIterator nestedCompounds() {
+	public ListIterator<ICompound> nestedCompounds() {
 		return new CompoundIdIterator(m_mainHandler, m_innerCompounds);
 	}
 

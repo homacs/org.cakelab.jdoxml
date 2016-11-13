@@ -2,7 +2,7 @@ package org.cakelab.jdoxml.api;
 
 import java.util.ListIterator;
 
-public interface IMember 
+public interface IMember extends IDocumentedElement
 {
     enum MemberKind { 
     	Invalid,

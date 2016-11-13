@@ -4,7 +4,6 @@ import java.util.ListIterator;
 
 import org.cakelab.jdoxml.Factory;
 import org.cakelab.jdoxml.api.ICompound;
-import org.cakelab.jdoxml.api.ICompoundIterator;
 import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocHRuler;
 import org.cakelab.jdoxml.api.IDocItemizedList;
@@ -18,6 +17,7 @@ import org.cakelab.jdoxml.api.IDocSection;
 import org.cakelab.jdoxml.api.IDocSimpleSect;
 import org.cakelab.jdoxml.api.IDocText;
 import org.cakelab.jdoxml.api.IDocVerbatim;
+import org.cakelab.jdoxml.api.IDocumentedElement;
 import org.cakelab.jdoxml.api.IDoxygen;
 import org.cakelab.jdoxml.api.IMember;
 import org.cakelab.jdoxml.api.IParam;
@@ -27,18 +27,18 @@ import org.cakelab.jdoxml.api.IUserDefined;
 
 public class Main {
 
-	static boolean isDocumented(IDocRoot brief, IDocRoot detailed) {
+	static boolean isDocumented(IDocumentedElement member) {
 		boolean found = false;
-		if (brief != null) {
-			ListIterator<IDoc> docIt = brief.contents();
-			if (docIt.hasNext()) // method has brief description
+		IDocRoot doc = member.briefDescription();
+		if (doc != null) {
+			if (doc.contents().hasNext()) // method has brief description
 			{
 				found = true;
 			}
 		}
-		if (detailed != null && !found) {
-			ListIterator<IDoc> docIt = detailed.contents();
-			if (docIt.hasNext()) {
+		doc = member.detailedDescription();
+		if (doc != null && !found) {
+			if (doc.contents().hasNext()) { // has detailed description
 				found = true;
 			}
 		}
@@ -93,11 +93,11 @@ public class Main {
 			System.exit(1);
 		}
 
-		ICompoundIterator cli = dox.compounds();
-		ICompound comp;
-		for (cli.toFirst(); (comp = cli.current()) != null; cli.toNext()) {
+		ListIterator<ICompound> cli = dox.compounds();
+		while (cli.hasNext()) {
+			ICompound comp = cli.next();
 			System.out.printf("Processing %s...\n", comp.name());
-			boolean hasDocs = isDocumented(comp.briefDescription(), comp.detailedDescription());
+			boolean hasDocs = isDocumented(comp);
 			switch (comp.kind()) {
 			case Class:
 				numClasses++;
@@ -145,62 +145,76 @@ public class Main {
 					ListIterator<IParam> pli = mem.parameters();
 					@SuppressWarnings("unused")
 					IParam par;
-					if (comp.kind() == ICompound.CompoundKind.Class || comp.kind() == ICompound.CompoundKind.Struct
-							|| comp.kind() == ICompound.CompoundKind.Interface) {
-						if (mem.kind() == IMember.MemberKind.Function || mem.kind() == IMember.MemberKind.Prototype
-								|| mem.kind() == IMember.MemberKind.Signal || mem.kind() == IMember.MemberKind.Slot
-								|| mem.kind() == IMember.MemberKind.DCOP) // is
-																			// a
-																			// "method"
-						{
+					switch (comp.kind()) {
+					case Class:
+					case Struct:
+					case Interface:
+						// is a compound type
+						switch (mem.kind()) {
+						case Function:
+						case Prototype:
+						case Signal:
+						case Slot:
+						case DCOP:
+							// is a "method"
 							if (mem.section().isPublic()) {
 								numPubMethods++;
-								if (isDocumented(mem.briefDescription(), mem.detailedDescription())) {
+								if (isDocumented(mem)) {
 									numDocPubMethods++;
 								}
 							} else if (mem.section().isProtected()) {
 								numProMethods++;
-								if (isDocumented(mem.briefDescription(), mem.detailedDescription())) {
+								if (isDocumented(mem)) {
 									numDocProMethods++;
 								}
 							} else if (mem.section().isPrivate()) {
 								numPriMethods++;
-								if (isDocumented(mem.briefDescription(), mem.detailedDescription())) {
+								if (isDocumented(mem)) {
 									numDocPriMethods++;
 								}
 							}
-						} else if (mem.kind() == IMember.MemberKind.Variable
-								|| mem.kind() == IMember.MemberKind.Property) // is
-																				// an
-																				// "attribute"
-						{
+							
+							break;
+						case Variable:
+						case Property:
+							// is an "attribute"
 							numAttributes++;
-							if (isDocumented(mem.briefDescription(), mem.detailedDescription())) {
+							if (isDocumented(mem)) {
 								numDocAttributes++;
 							}
+							break;
+						default:
+							// ignoring other cases
+							break;
 						}
-					} else if (comp.kind() == ICompound.CompoundKind.File
-							|| comp.kind() == ICompound.CompoundKind.Namespace) {
-						if (mem.kind() == IMember.MemberKind.Function || mem.kind() == IMember.MemberKind.Prototype
-								|| mem.kind() == IMember.MemberKind.Signal || mem.kind() == IMember.MemberKind.Slot
-								|| mem.kind() == IMember.MemberKind.DCOP) // is
-																			// a
-																			// "method"
-						{
+						break; // compound type
+					case File:
+					case Namespace:
+						switch(mem.kind()) {
+						case Function:
+						case Prototype:
+						case Signal:
+						case Slot:
+						case DCOP:
+							// is a "method"
 							numFunctions++;
-							if (isDocumented(mem.briefDescription(), mem.detailedDescription())) {
+							if (isDocumented(mem)) {
 								numDocFunctions++;
 							}
-						} else if (mem.kind() == IMember.MemberKind.Variable
-								|| mem.kind() == IMember.MemberKind.Property) // is
-																				// an
-																				// "attribute"
-						{
+							break;
+						case Variable:
+						case Property:
+							// is an "attribute"
 							numVariables++;
-							if (isDocumented(mem.briefDescription(), mem.detailedDescription())) {
+							if (isDocumented(mem)) {
 								numDocVariables++;
 							}
+						default:
+							break;
 						}
+						break;
+					default:
+						break;
 					}
 
 					while (pli.hasNext()) {

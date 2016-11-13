@@ -9,7 +9,7 @@ public interface IFile extends ICompound
     IGraph includeDependencyGraph();
     IGraph includedByDependencyGraph();
     IDocProgramListing source();
-    ICompoundIterator nestedCompounds();
+    ListIterator<ICompound> nestedCompounds();
 
     ListIterator<IInclude> includes();
     ListIterator<IInclude> includedBy();

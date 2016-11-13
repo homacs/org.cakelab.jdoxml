@@ -5,9 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.ICompound;
-import org.cakelab.jdoxml.api.ICompoundIterator;
 import org.cakelab.jdoxml.api.IDoxygen;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -97,10 +97,12 @@ public class MainHandler extends BaseHandler<MainHandler> implements IDoxygen {
 	}
 
 	public void dump() {
-		for (CompoundEntry ce : m_compounds) {
-			Log.debug(2, "compound id=`%s' name=`%s'\n", ce.id, ce.name);
-			for (MemberEntry me : ce.memberDict.values()) {
-				Log.debug(2, "  member id=`%s' name=`%s'\n", me.id, me.name);
+		if (Log.hasDebugLevel(2)) {
+			for (CompoundEntry ce : m_compounds) {
+				Log.debug(2, "compound id=`%s' name=`%s'\n", ce.id, ce.name);
+				for (MemberEntry me : ce.memberDict.values()) {
+					Log.debug(2, "  member id=`%s' name=`%s'\n", me.id, me.name);
+				}
 			}
 		}
 	}
@@ -112,16 +114,18 @@ public class MainHandler extends BaseHandler<MainHandler> implements IDoxygen {
 		// printf("Trying %s xmlFile.exists()=%d isReadable()=%d\n",
 		// xmlFileName,xmlFile.exists(),xmlFile.isReadable());
 		if (xmlFile.exists()) {
-			InputSource source = new InputSource(new FileInputStream(xmlFile));
+			FileInputStream input = new FileInputStream(xmlFile);
+			InputSource source = new InputSource(input);
 			XMLReader reader = XMLReaderFactory.createXMLReader();
 			reader.setContentHandler(this);
 			reader.setErrorHandler(new ErrorHandler());
 			reader.parse(source);
 			dump();
+			input.close();
 		}
 	}
 
-	public ICompoundIterator compounds() {
+	public ListIterator<ICompound> compounds() {
 		return new CompoundEntryIterator(this, m_compounds);
 	}
 
@@ -180,7 +184,7 @@ public class MainHandler extends BaseHandler<MainHandler> implements IDoxygen {
 		return compoundById(me.compound.id);
 	}
 
-	public ICompoundIterator memberByName(String name) {
+	public ListIterator<ICompound> memberByName(String name) {
 		String nameStr = name;
 		if (nameStr.isEmpty())
 			return null;

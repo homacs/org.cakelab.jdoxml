@@ -11,7 +11,7 @@ public interface IClass extends ICompound
     IGraph collaborationGraph();
     ListIterator<IRelatedCompound> baseCompounds();
     ListIterator<IRelatedCompound> derivedCompounds();
-    ICompoundIterator nestedCompounds();
+    ListIterator<ICompound> nestedCompounds();
     ListIterator<IParam> templateParameters();
     String locationFile();
     int locationLine();

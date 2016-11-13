@@ -27,7 +27,7 @@ import java.util.ListIterator;
  *  To avoid excessive memory usage, release() should be called (once) on each 
  *  compound public interface pointer that is no longer needed.
  */
-public interface ICompound 
+public interface ICompound extends IDocumentedElement
 {
     /** Represents the kind of compounds recognised by doxygen. */
     public enum CompoundKind { 
