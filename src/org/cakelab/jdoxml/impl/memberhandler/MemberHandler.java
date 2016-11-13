@@ -157,15 +157,15 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 		m_kind = s_typeMap.map(m_kindString);
 		m_id = attrib.getValue("id");
 		m_protection = attrib.getValue("prot");
-		m_isStatic = attrib.getValue("static") == "yes";
-		m_isConst = attrib.getValue("") == "yes";
-		m_isExplicit = attrib.getValue("explicit") == "yes";
-		m_isInline = attrib.getValue("inline") == "yes";
+		m_isStatic = "yes".equals(attrib.getValue("static"));
+		m_isConst = "yes".equals(attrib.getValue("const"));
+		m_isExplicit = "yes".equals(attrib.getValue("explicit"));
+		m_isInline = "yes".equals(attrib.getValue("inline"));
 		m_virtualness = attrib.getValue("virt");
-		m_isVolatile = attrib.getValue("volatile") == "yes";
-		m_isMutable = attrib.getValue("mutable") == "yes";
-		m_isReadable = attrib.getValue("readable") == "yes";
-		m_isWritable = attrib.getValue("writable") == "yes";
+		m_isVolatile = "yes".equals(attrib.getValue("volatile"));
+		m_isMutable = "yes".equals(attrib.getValue("mutable"));
+		m_isReadable = "yes".equals(attrib.getValue("readable"));
+		m_isWritable = "yes".equals(attrib.getValue("writable"));
 
 		Log.debug(2, "member kind=`%s' id=`%s' prot=`%s' virt=`%s'\n", m_kindString, m_id, m_protection, m_virtualness);
 	}
@@ -218,14 +218,11 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 		m_bodyFile = attrib.getValue("bodyfile");
 		String s;
 		s = attrib.getValue("line");
-		if (!s.isEmpty())
-			m_defLine = StringDecode.toInt(s);
+		m_defLine = StringDecode.toInt(s, 0);
 		s = attrib.getValue("bodystart");
-		if (!s.isEmpty())
-			m_bodyStart = StringDecode.toInt(s);
+		m_bodyStart = StringDecode.toInt(s, 0);
 		s = attrib.getValue("bodyend");
-		if (!s.isEmpty())
-			m_bodyEnd = StringDecode.toInt(s);
+		m_bodyEnd = StringDecode.toInt(s, 0);
 	}
 
 	public void startReferences(Attributes attrib) {

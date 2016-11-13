@@ -27,8 +27,8 @@ public class RefHandler extends BaseHandler<RefHandler> implements IDocRef {
 		m_parent.setDelegate(this);
 		m_refId = attrib.getValue("refid");
 		m_extId = attrib.getValue("external");
-		assert (attrib.getValue("kindref") == "compound" || attrib.getValue("kindref") == "member");
-		m_targetKind = attrib.getValue("kindref") == "compound" ? TargetKind.Compound : TargetKind.Member;
+		assert ("compound".equals(attrib.getValue("kindref")) || "member".equals(attrib.getValue("kindref")));
+		m_targetKind = "compound".equals(attrib.getValue("kindref")) ? TargetKind.Compound : TargetKind.Member;
 		Log.debug(2, "Start ref refId=%s\n", m_refId);
 		m_curString = "";
 	}

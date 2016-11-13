@@ -23,7 +23,7 @@ public class HRulerHandler extends BaseHandler<HRulerHandler> implements IDocHRu
 		Log.debug(2, "Start hruler\n");
 	}
 
-	void endHRuler() {
+	public void endHRuler() {
 		m_parent.setDelegate(null);
 		Log.debug(2, "End hruler\n");
 	}

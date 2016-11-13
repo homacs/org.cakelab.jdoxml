@@ -26,7 +26,7 @@ class ElementMapper<T>
 				try {
 					m_handler.invoke(m_parent, attrib);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
+					throw new RuntimeException("implementation error", e);
 				} 
 			}
 		}

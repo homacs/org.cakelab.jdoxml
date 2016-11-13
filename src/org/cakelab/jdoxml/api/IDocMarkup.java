@@ -1,4 +1,5 @@
 package org.cakelab.jdoxml.api;
+
 public interface IDocMarkup extends IDoc
 {
     enum Markup 
@@ -22,6 +23,22 @@ public interface IDocMarkup extends IDoc
 		
 		public int value() {
 			return value;
+		}
+
+		public static Markup enumFor(int value) {
+			switch(value) {
+			case 0x000: return Normal;
+			case 0x001: return Bold;
+			case 0x002: return Emphasis;
+			case 0x004: return ComputerOutput;
+			case 0x008: return Subscript;
+			case 0x010: return Superscript;
+			case 0x020: return SmallFont;
+			case 0x040: return Center;
+			case 0x080: return Preformatted;
+			case 0x100: return Heading;
+			}
+			return null;
 		}
     };
 }

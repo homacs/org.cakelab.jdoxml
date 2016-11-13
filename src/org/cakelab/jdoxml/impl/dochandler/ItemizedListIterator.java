@@ -5,7 +5,7 @@ import org.cakelab.jdoxml.api.IDocListItem;
 import org.cakelab.jdoxml.impl.baseiterator.BaseIterator;
 
 public class ItemizedListIterator extends BaseIterator<IDocListItem> implements IDocIterator {
-	ItemizedListIterator(ItemizedListHandler handler) {
+	public ItemizedListIterator(ItemizedListHandler handler) {
 		super(handler.m_children);
 	}
 }

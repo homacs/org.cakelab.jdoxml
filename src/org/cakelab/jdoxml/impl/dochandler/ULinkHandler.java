@@ -26,7 +26,7 @@ public class ULinkHandler extends BaseHandler<ULinkHandler> implements IDocULink
 		m_curString = "";
 	}
 
-	void endULink() {
+	public void endULink() {
 		m_text = m_curString;
 		m_curString = "";
 		m_parent.setDelegate(null);

@@ -1,5 +1,6 @@
 package org.cakelab.jdoxml.impl.dochandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.cakelab.jdoxml.api.IDoc;
@@ -19,8 +20,8 @@ import org.xml.sax.Attributes;
 public class DocSectionHandler extends BaseHandler<DocSectionHandler> implements IDocSection {
 
 	private IBaseHandler m_parent;
-	List<IDoc> m_paragraphs;
-	List<IDoc> m_subsections;
+	List<IDoc> m_paragraphs = new ArrayList<IDoc>();
+	List<IDoc> m_subsections = new ArrayList<IDoc>();
 	private DocInternalHandler m_internal;
 	private String m_id;
 	private int m_level;

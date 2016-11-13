@@ -1,4 +1,4 @@
-package org.cakelab.jdoxml.examples.metrics;
+package org.cakelab.jdoxml.examples.dnadoc;
 
 import org.cakelab.jdoxml.Factory;
 import org.cakelab.jdoxml.api.ICompound;
@@ -145,7 +145,6 @@ public class Main {
 				IMember mem;
 				for (mli.toFirst(); (mem = mli.current()) != null; mli.toNext()) {
 					IParamIterator pli = mem.parameters();
-					@SuppressWarnings("unused")
 					IParam par;
 					if (comp.kind() == ICompound.CompoundKind.Class || comp.kind() == ICompound.CompoundKind.Struct
 							|| comp.kind() == ICompound.CompoundKind.Interface) {

@@ -220,10 +220,10 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 
 	public void startLocation(Attributes attrib) {
 		m_defFile = attrib.getValue("file");
-		m_defLine = StringDecode.toInt(attrib.getValue("line"));
+		m_defLine = StringDecode.toInt(attrib.getValue("line"), 0);
 		m_defBodyFile = attrib.getValue("bodyfile");
-		m_defBodyStart = StringDecode.toInt(attrib.getValue("bodystart"));
-		m_defBodyEnd = StringDecode.toInt(attrib.getValue("bodyend"));
+		m_defBodyStart = StringDecode.toInt(attrib.getValue("bodystart"), 0);
+		m_defBodyEnd = StringDecode.toInt(attrib.getValue("bodyend"), 0);
 	}
 
 	public void endCompoundName() {

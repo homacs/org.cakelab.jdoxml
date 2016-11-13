@@ -46,7 +46,7 @@ public class CodeLineHandler extends BaseHandler<CodeLineHandler> implements IDo
 	public void startLineNumber(Attributes attrib) {
 		m_parent.setDelegate(this);
 		Log.debug(2, "start linenumber\n");
-		m_lineNumber = StringDecode.toInt(attrib.getValue("line"));
+		m_lineNumber = StringDecode.toInt(attrib.getValue("line"), 0);
 		m_refId = attrib.getValue("refid");
 	}
 

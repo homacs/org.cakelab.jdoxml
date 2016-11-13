@@ -1,7 +1,7 @@
 package org.cakelab.jdoxml.impl.baseiterator;
 
 import java.util.List;
-import java.util.ListIterator;
+
 
 
 public class BaseIterator<T> 
@@ -23,11 +23,11 @@ public class BaseIterator<T>
     	return current(); 
     }
     public T toNext()  { 
-    	current++;
+    	nextIndex();
     	return current();
     }
     public T toPrev()  { 
-    	current--;
+    	previousIndex();
     	return current(); 
     }
     public T current() {
@@ -40,5 +40,32 @@ public class BaseIterator<T>
     	return result;
     }
 	public void release() { 
+	}
+	public boolean hasNext() {
+		return current < list.size()-1;
+	}
+	public T next() {
+		return toNext();
+	}
+	public boolean hasPrevious() {
+		return current > 0 && list.size() > 0;
+	}
+	public T previous() {
+		return toPrev();
+	}
+	public int nextIndex() {
+		return current < list.size()?++current:current;
+	}
+	public int previousIndex() {
+		return current > -1 ? --current : current;
+	}
+	public void remove() {
+		list.remove(current);
+	}
+	public void set(T e) {
+		throw new UnsupportedOperationException("not supported");
+	}
+	public void add(T e) {
+		throw new UnsupportedOperationException("not supported");
 	}
 }

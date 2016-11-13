@@ -33,7 +33,7 @@ public class TableHandler extends BaseHandler<TableHandler> implements IDocTable
 
 	public void startTable(Attributes attrib) {
 		m_parent.setDelegate(this);
-		m_numColumns = StringDecode.toInt(attrib.getValue("cols"));
+		m_numColumns = StringDecode.toInt(attrib.getValue("cols"), 0);
 		Log.debug(2, "table cols=%d\n", m_numColumns);
 	}
 

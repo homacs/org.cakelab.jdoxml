@@ -1,5 +1,8 @@
 package org.cakelab.jdoxml.api;
-public interface IDocIterator 
+
+import java.util.ListIterator;
+
+public interface IDocIterator
 {
     IDoc toFirst();
     IDoc toLast();
