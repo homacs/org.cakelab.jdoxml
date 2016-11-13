@@ -1,22 +1,21 @@
 package org.cakelab.jdoxml.impl.loamhandler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IMemberReferenceIterator;
+import org.cakelab.jdoxml.api.IMemberReference;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
 import org.cakelab.jdoxml.impl.mainhandler.MainHandler;
 import org.cakelab.jdoxml.impl.memberhandler.MemberReference;
-import org.cakelab.jdoxml.impl.memberhandler.MemberReferenceIterator;
 import org.xml.sax.Attributes;
 
 public class ListOfAllMembersHandler extends BaseHandler<ListOfAllMembersHandler>
 {
     protected IBaseHandler m_parent;
-    protected List<MemberReference> m_members = new ArrayList<MemberReference>();
+    protected List<IMemberReference> m_members = new ArrayList<IMemberReference>();
     
 
 
@@ -35,9 +34,9 @@ public ListOfAllMembersHandler(IBaseHandler parent)
 
 public void initialize(MainHandler mh)
 {
-  for (MemberReference mr : m_members)
+  for (IMemberReference mr : m_members)
   {
-    mr.initialize(mh);
+    ((MemberReference)mr).initialize(mh);
   }
 }
 
@@ -59,7 +58,7 @@ public void startName(Attributes attrib)
 public void endName()
 {
   assert (m_members.size() != 0);
-  m_members.get(m_members.size()-1).m_name = m_curString;
+  ((MemberReference)m_members.get(m_members.size()-1)).m_name = m_curString;
 }
 
 public void startScope(Attributes attrib)
@@ -70,7 +69,7 @@ public void startScope(Attributes attrib)
 public void endScope()
 {
 	  assert (m_members.size() != 0);
-  m_members.get(m_members.size()-1).m_scope = m_curString;
+	  ((MemberReference)m_members.get(m_members.size()-1)).m_scope = m_curString;
 }
 
 public void startListOfAllMembers(Attributes  attrib)
@@ -85,9 +84,9 @@ public void endListOfAllMembers()
   Log.debug(2,"listofallmembers end\n");
 }
 
-public IMemberReferenceIterator members() 
+public ListIterator<IMemberReference> members() 
 { 
-  return new MemberReferenceIterator(m_members); 
+  return m_members.listIterator(); 
 }
 
     

@@ -2,10 +2,10 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocCopy;
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
@@ -16,7 +16,7 @@ import org.xml.sax.Attributes;
  */
 public class CopyHandler extends BaseHandler<CopyHandler> implements IDocCopy {
 	private IBaseHandler m_parent;
-	List<IDoc> m_children = new ArrayList<IDoc>();
+	List<IDocPara> m_children = new ArrayList<IDocPara>();
 
 	CopyHandler(IBaseHandler parent)
 
@@ -43,8 +43,8 @@ public class CopyHandler extends BaseHandler<CopyHandler> implements IDocCopy {
 		m_children.add(parHandler);
 	}
 
-	public IDocIterator contents() {
-		return new CopyIterator(this);
+	public ListIterator<IDocPara> contents() {
+		return m_children.listIterator();
 
 	}
 

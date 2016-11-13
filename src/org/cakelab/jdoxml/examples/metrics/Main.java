@@ -1,12 +1,13 @@
 package org.cakelab.jdoxml.examples.metrics;
 
+import java.util.ListIterator;
+
 import org.cakelab.jdoxml.Factory;
 import org.cakelab.jdoxml.api.ICompound;
 import org.cakelab.jdoxml.api.ICompoundIterator;
 import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocHRuler;
 import org.cakelab.jdoxml.api.IDocItemizedList;
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocListItem;
 import org.cakelab.jdoxml.api.IDocMarkup;
 import org.cakelab.jdoxml.api.IDocMarkupModifier;
@@ -19,31 +20,27 @@ import org.cakelab.jdoxml.api.IDocText;
 import org.cakelab.jdoxml.api.IDocVerbatim;
 import org.cakelab.jdoxml.api.IDoxygen;
 import org.cakelab.jdoxml.api.IMember;
-import org.cakelab.jdoxml.api.IMemberIterator;
 import org.cakelab.jdoxml.api.IParam;
-import org.cakelab.jdoxml.api.IParamIterator;
 import org.cakelab.jdoxml.api.ISection;
-import org.cakelab.jdoxml.api.ISectionIterator;
 import org.cakelab.jdoxml.api.IStruct;
+import org.cakelab.jdoxml.api.IUserDefined;
 
 public class Main {
 
 	static boolean isDocumented(IDocRoot brief, IDocRoot detailed) {
 		boolean found = false;
 		if (brief != null) {
-			IDocIterator docIt = brief.contents();
-			if (docIt.current() != null) // method has brief description
+			ListIterator<IDoc> docIt = brief.contents();
+			if (docIt.hasNext()) // method has brief description
 			{
 				found = true;
 			}
-			docIt.release();
 		}
 		if (detailed != null && !found) {
-			IDocIterator docIt = detailed.contents();
-			if (docIt.current() != null) {
+			ListIterator<IDoc> docIt = detailed.contents();
+			if (docIt.hasNext()) {
 				found = true;
 			}
-			docIt.release();
 		}
 		return found;
 	}
@@ -138,13 +135,14 @@ public class Main {
 				break;
 			}
 
-			ISectionIterator sli = comp.sections();
-			ISection sec;
-			for (sli.toFirst(); (sec = sli.current()) != null; sli.toNext()) {
-				IMemberIterator mli = sec.members();
+			ListIterator<IUserDefined> sli = comp.sections();
+			while (sli.hasNext()) {
+				ISection sec = sli.next();
+				ListIterator<IMember> mli = sec.members();
 				IMember mem;
-				for (mli.toFirst(); (mem = mli.current()) != null; mli.toNext()) {
-					IParamIterator pli = mem.parameters();
+				while (mli.hasNext()) {
+					mem = mli.next();
+					ListIterator<IParam> pli = mem.parameters();
 					@SuppressWarnings("unused")
 					IParam par;
 					if (comp.kind() == ICompound.CompoundKind.Class || comp.kind() == ICompound.CompoundKind.Struct
@@ -205,22 +203,17 @@ public class Main {
 						}
 					}
 
-					for (pli.toFirst(); (par = pli.current()) != null; pli.toNext()) {
+					while (pli.hasNext()) {
+						pli.next();
 						numParams++;
 					}
 					String type = mem.typeString();
 					if (!"void".equals(type)) {
 						numParams++; // count non-void return types as well
 					}
-					pli.release();
 				}
-				mli.release();
 			}
-			sli.release();
-
-			comp.release();
 		}
-		cli.release();
 
 		dox.release();
 
@@ -371,20 +364,20 @@ public class Main {
 
 	private static void dump(IDocItemizedList list) {
 		System.out.println("<ul>");
-		IDocIterator i = list.elements();
+		ListIterator<IDocListItem> i = list.elements();
 		IDocListItem item;
 		
-		for (i.toFirst(); (item = (IDocListItem) i.current()) != null; i.toNext()) {
+		while (i.hasNext()) {
+			item = i.next();
 			System.out.print("<li>");
 			dump(item.contents());
 			System.out.print("</li>");
 		}
 	}
 
-	private static void dump(IDocIterator i) {
-		IDoc l;
-		for (i.toFirst(); (l = i.current()) != null; i.toNext()) {
-			dump(l);
+	private static void dump(ListIterator<? extends IDoc> i) {
+		while (i.hasNext()) {
+			dump(i.next());
 		}
 	}
 

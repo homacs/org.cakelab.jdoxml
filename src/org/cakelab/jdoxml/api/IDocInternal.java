@@ -1,6 +1,9 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IDocInternal extends IDoc
 {
-    IDocIterator paragraphs();
-    IDocIterator subSections();
+    ListIterator<IDocPara> paragraphs();
+    ListIterator<IDocSection> subSections();
 }

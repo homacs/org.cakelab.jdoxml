@@ -2,8 +2,9 @@ package org.cakelab.jdoxml.impl.graphhandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IChildNodeIterator;
+import org.cakelab.jdoxml.api.IChildNode;
 import org.cakelab.jdoxml.api.INode;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -15,7 +16,7 @@ public class NodeHandler extends BaseHandler<NodeHandler> implements INode {
 	private String m_id;
 	private String m_label;
 	private String m_link;
-	List<ChildNodeHandler> m_children = new ArrayList<ChildNodeHandler>();
+	List<IChildNode> m_children = new ArrayList<IChildNode>();
 	private GraphHandler m_graph;
 
 	NodeHandler(GraphHandler gh) {
@@ -61,8 +62,8 @@ public class NodeHandler extends BaseHandler<NodeHandler> implements INode {
 		m_children.add(cnh);
 	}
 
-	public IChildNodeIterator children() {
-		return new ChildNodeIterator(this);
+	public ListIterator<IChildNode> children() {
+		return m_children.listIterator();
 	}
 
 	public String id() {

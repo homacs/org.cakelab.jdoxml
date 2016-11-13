@@ -1,4 +1,7 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IDocHighlight extends IDoc
 {
     enum HighlightKind 
@@ -16,5 +19,5 @@ public interface IDocHighlight extends IDoc
     	}
     };
     HighlightKind highlightKind();
-    IDocIterator  codeElements();
+    ListIterator<IDoc>  codeElements();
 }

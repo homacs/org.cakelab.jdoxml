@@ -1,16 +1,16 @@
 package org.cakelab.jdoxml.impl.dochandler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.api.IDocVariableListEntry;
 import org.cakelab.jdoxml.api.ILinkedText;
-import org.cakelab.jdoxml.api.ILinkedTextIterator;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
 import org.cakelab.jdoxml.impl.linkedtexthandler.LinkedTextHandler;
-import org.cakelab.jdoxml.impl.linkedtexthandler.LinkedTextIterator;
 import org.xml.sax.Attributes;
 
 /* \brief Node representing an named item of a VariableList.
@@ -18,7 +18,7 @@ import org.xml.sax.Attributes;
  */
 public class VariableListEntryHandler extends BaseHandler<VariableListEntryHandler> implements IDocVariableListEntry {
 	private IBaseHandler m_parent;
-	private List<ILinkedText> m_term;
+	private List<ILinkedText> m_term = new ArrayList<ILinkedText>();
 	private ParagraphHandler m_description;
 	private LinkedTextHandler m_linkedTextHandler;
 
@@ -69,8 +69,8 @@ public class VariableListEntryHandler extends BaseHandler<VariableListEntryHandl
 		m_description.startParagraph(attrib);
 	}
 
-	public ILinkedTextIterator term() {
-		return new LinkedTextIterator(m_term);
+	public ListIterator<ILinkedText> term() {
+		return m_term.listIterator();
 	}
 
 	public Kind kind() {

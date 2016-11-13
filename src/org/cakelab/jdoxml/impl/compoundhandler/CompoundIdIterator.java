@@ -13,9 +13,39 @@ class CompoundIdIterator implements ICompoundIterator
 	private MainHandler m_mainHandler;
 	private BaseIterator<String> iterator;
 
+	
 	CompoundIdIterator(MainHandler m, List<String> list) {
 		iterator = new BaseIterator<String>(list);
 		m_mainHandler = m;
+	}
+
+
+	public boolean hasNext() {
+		return iterator.hasNext();
+	}
+
+	public boolean hasPrevious() {
+		return iterator.hasPrevious();
+	}
+
+	public int nextIndex() {
+		return iterator.nextIndex();
+	}
+
+	public int previousIndex() {
+		return iterator.previousIndex();
+	}
+
+	public void remove() {
+		iterator.remove();
+	}
+
+	public void set(String e) {
+		iterator.set(e);
+	}
+
+	public void add(String e) {
+		iterator.add(e);
 	}
 
 	public void toFirst() {
@@ -39,7 +69,25 @@ class CompoundIdIterator implements ICompoundIterator
 		return id != null ? m_mainHandler.compoundById(id) : null;
 	}
 
-	public void release() {
+	public ICompound next() {
+		iterator.next();
+		return current();
+	}
+
+	@Override
+	public ICompound previous() {
+		iterator.previous();
+		return current();
+	}
+
+	@Override
+	public void set(ICompound e) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void add(ICompound e) {
+		throw new UnsupportedOperationException();
 	}
 
 }

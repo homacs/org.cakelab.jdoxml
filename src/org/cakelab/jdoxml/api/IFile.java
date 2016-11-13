@@ -1,4 +1,7 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 /** The public interface to a file in the object model. 
  */
 public interface IFile extends ICompound
@@ -8,8 +11,8 @@ public interface IFile extends ICompound
     IDocProgramListing source();
     ICompoundIterator nestedCompounds();
 
-    IIncludeIterator includes();
-    IIncludeIterator includedBy();
+    ListIterator<IInclude> includes();
+    ListIterator<IInclude> includedBy();
 
     //  ICompound *innerNamespaces()
     //  ICompoundIterator *innerClasses()

@@ -2,9 +2,10 @@ package org.cakelab.jdoxml.impl.graphhandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IChildNode;
-import org.cakelab.jdoxml.api.IEdgeLabelIterator;
+import org.cakelab.jdoxml.api.IEdgeLabel;
 import org.cakelab.jdoxml.api.INode;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -16,7 +17,7 @@ public class ChildNodeHandler extends BaseHandler<ChildNodeHandler> implements I
 	private String m_id;
 	private NodeRelation m_relation;
 	private String m_relationString;
-	List<EdgeLabelHandler> m_edgeLabels = new ArrayList<EdgeLabelHandler>();
+	List<IEdgeLabel> m_edgeLabels = new ArrayList<IEdgeLabel>();
 	private GraphHandler m_graph;
 
 	public ChildNodeHandler(IBaseHandler parent, GraphHandler gh) {
@@ -45,8 +46,8 @@ public class ChildNodeHandler extends BaseHandler<ChildNodeHandler> implements I
 		m_edgeLabels.add(elh);
 	}
 
-	public IEdgeLabelIterator edgeLabels() {
-		return new EdgeLabelIterator(this);
+	public ListIterator<IEdgeLabel> edgeLabels() {
+		return m_edgeLabels.listIterator();
 	}
 
 	public INode node() {

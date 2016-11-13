@@ -1,10 +1,10 @@
 package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocEntry;
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
 import org.xml.sax.Attributes;
@@ -16,7 +16,7 @@ import org.xml.sax.Attributes;
 public class EntryHandler extends BaseHandler<EntryHandler> implements IDocEntry
 {
     private IBaseHandler   m_parent;
-    List<IDoc>  m_children;
+    List<IDocPara>  m_children;
 
 public EntryHandler(IBaseHandler parent)
   
@@ -44,9 +44,9 @@ public void startParagraph(Attributes attrib)
   m_children.add(ph);
 }
 
-public IDocIterator contents()
+public ListIterator<IDocPara> contents()
 {
-  return new EntryIterator(this);
+  return m_children.listIterator();
 }
 
     public Kind kind() { return Kind.Entry; }

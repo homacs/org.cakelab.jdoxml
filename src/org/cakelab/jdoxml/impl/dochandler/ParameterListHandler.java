@@ -2,8 +2,9 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocParameterItem;
 import org.cakelab.jdoxml.api.IDocParameterList;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -15,7 +16,7 @@ import org.xml.sax.Attributes;
  */
 public class ParameterListHandler extends BaseHandler<ParameterListHandler> implements IDocParameterList {
 	private IBaseHandler m_parent;
-	List<ParameterItemHandler> m_paramItems = new ArrayList<ParameterItemHandler>();
+	List<IDocParameterItem> m_paramItems = new ArrayList<IDocParameterItem>();
 	private Types m_type;
 
 	public ParameterListHandler(IBaseHandler parent) {
@@ -49,8 +50,8 @@ public class ParameterListHandler extends BaseHandler<ParameterListHandler> impl
 		paramItem.startParameterItem(attrib);
 	}
 
-	public IDocIterator params() {
-		return new ParameterListIterator(this);
+	public ListIterator<IDocParameterItem> params() {
+		return m_paramItems.listIterator();
 	}
 
 	public Kind kind() {

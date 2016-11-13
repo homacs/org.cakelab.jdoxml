@@ -1,7 +1,10 @@
 package org.cakelab.jdoxml.impl.paramhandler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
+import org.cakelab.jdoxml.api.IParam;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
@@ -9,7 +12,7 @@ import org.xml.sax.Attributes;
 
 public class TemplateParamListHandler extends BaseHandler<TemplateParamListHandler> {
 	protected IBaseHandler m_parent;
-	protected List<ParamHandler> m_templateParams;
+	protected List<IParam> m_templateParams = new ArrayList<IParam>();
 
 	public TemplateParamListHandler(IBaseHandler parent) {
 		m_parent = parent;
@@ -36,8 +39,8 @@ public class TemplateParamListHandler extends BaseHandler<TemplateParamListHandl
 		m_parent.setDelegate(null);
 	}
 
-	public ParamIterator templateParams() {
-		return new ParamIterator(m_templateParams);
+	public ListIterator<IParam> templateParams() {
+		return m_templateParams.listIterator();
 	}
 
 }

@@ -10,6 +10,7 @@ import org.xml.sax.Attributes;
  */
 // children: -
 public class SymbolHandler extends BaseHandler<SymbolHandler> implements IDocSymbol {
+	@SuppressWarnings("unused")
 	private IBaseHandler m_parent;
 	private char m_letter;
 	private Types m_type;

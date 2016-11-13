@@ -1,4 +1,7 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 /** The public interface to a compound in the object model. 
  *
  *  A compound has a name which can be obtained via the name() method 
@@ -68,7 +71,7 @@ public interface ICompound
     /** Returns an iterator for the different member sections in this
      *  compound.
      */
-    ISectionIterator sections();
+    ListIterator<IUserDefined> sections();
 
     /** Returns a tree-structured representation of the brief
      *  description that is attached to this compound.
@@ -90,10 +93,6 @@ public interface ICompound
      *  one member. 
      *  @param name The name of the member.
      */
-    IMemberIterator memberByName(String name);
+    ListIterator<IMember> memberByName(String name);
 
-    /** Decreases the reference counter for this compound. If it reaches
-     *  zero, the memory for the compound will be released.
-     */
-    void release();
 }

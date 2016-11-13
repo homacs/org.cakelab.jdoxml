@@ -2,8 +2,8 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.api.IDocParameterItem;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -49,8 +49,8 @@ public class ParameterItemHandler extends BaseHandler<ParameterItemHandler> impl
 		m_description.startParagraph(attrib);
 	}
 
-	public IDocIterator paramNames() {
-		return new ParameterItemIterator(this);
+	public ListIterator<ParameterHandler> paramNames() {
+		return m_parameters.listIterator();
 	}
 
 	public Kind kind() {

@@ -1,10 +1,12 @@
 package org.cakelab.jdoxml.impl.dochandler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocInternal;
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocPara;
+import org.cakelab.jdoxml.api.IDocSection;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
@@ -12,8 +14,8 @@ import org.xml.sax.Attributes;
 
 public class DocInternalHandler extends BaseHandler<DocInternalHandler> implements IDocInternal {
 	private IBaseHandler m_parent;
-	List<IDoc> m_paragraphs;
-	List<IDoc> m_subsections;
+	List<IDocPara> m_paragraphs = new ArrayList<IDocPara>();
+	List<IDocSection> m_subsections = new ArrayList<IDocSection>();
 	private int m_level;
 
 	public DocInternalHandler(IBaseHandler parent, int level) {
@@ -48,12 +50,12 @@ public class DocInternalHandler extends BaseHandler<DocInternalHandler> implemen
 		m_paragraphs.add(parHandler);
 	}
 
-	public IDocIterator paragraphs() {
-		return new DocInternalParaIterator(this);
+	public ListIterator<IDocPara> paragraphs() {
+		return m_paragraphs.listIterator();
 	}
 
-	public IDocIterator subSections() {
-		return new DocInternalSubIterator(this);
+	public ListIterator<IDocSection> subSections() {
+		return m_subsections.listIterator();
 	}
 
 	public Kind kind() {

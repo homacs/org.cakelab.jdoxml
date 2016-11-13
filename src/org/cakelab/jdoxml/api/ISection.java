@@ -1,4 +1,7 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 /** The public interface to a section in the object model. 
  *
  *  A compound can have a number of sections, where each
@@ -67,7 +70,7 @@ public interface ISection
     IDocRoot description();
     
     /** Returns an iterator for the members of this section */
-    IMemberIterator members();
+    ListIterator<IMember> members();
     
     /** Returns \c true if this section contains statics */
     boolean isStatic();

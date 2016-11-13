@@ -1,4 +1,7 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IMember 
 {
     enum MemberKind { 
@@ -27,7 +30,7 @@ public interface IMember
     String  id();
     String  protection();
     String  virtualness();
-    ILinkedTextIterator type();
+    ListIterator<ILinkedText> type();
     String  typeString();
     String  name();
     String  readAccessor();
@@ -42,19 +45,19 @@ public interface IMember
     boolean isMutable();
     boolean isReadable();
     boolean isWritable();
-    IParamIterator parameters();
-    IParamIterator templateParameters();
-    ILinkedTextIterator initializer();
-    ILinkedTextIterator exceptions();
-    IMemberReferenceIterator references(); 
-    IMemberReferenceIterator referencedBy();
+    ListIterator<IParam> parameters();
+    ListIterator<IParam> templateParameters();
+    ListIterator<ILinkedText> initializer();
+    ListIterator<ILinkedText> exceptions();
+    ListIterator<IMemberReference> references(); 
+    ListIterator<IMemberReference> referencedBy();
     String bodyFile();
     int bodyStart();
     int bodyEnd();
     String  definitionFile();
     int definitionLine();
     IMemberReference reimplements();
-    IMemberReferenceIterator reimplementedBy();
+    ListIterator<IMemberReference> reimplementedBy();
     IDocRoot briefDescription();
     IDocRoot detailedDescription();
     IDocRoot inbodyDescription();

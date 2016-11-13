@@ -1,8 +1,8 @@
 package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocTocItem;
 import org.cakelab.jdoxml.api.IDocTocList;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -49,8 +49,8 @@ public void startTocItem(Attributes attrib)
    m_children.add(tiHandler);
  }
 
-public IDocIterator elements() {
-   return new TocListIterator(this);
+public ListIterator<IDocTocItem> elements() {
+   return m_children.listIterator();
  }
 
 }

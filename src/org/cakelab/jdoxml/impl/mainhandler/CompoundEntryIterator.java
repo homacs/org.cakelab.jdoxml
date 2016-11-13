@@ -1,64 +1,77 @@
 package org.cakelab.jdoxml.impl.mainhandler;
 
 import java.util.List;
-import java.util.ListIterator;
-
 import org.cakelab.jdoxml.api.ICompound;
 import org.cakelab.jdoxml.api.ICompoundIterator;
+import org.cakelab.jdoxml.impl.baseiterator.BaseIterator;
 
 public class CompoundEntryIterator implements ICompoundIterator {
 	private MainHandler m_mainHandler;
-	private ListIterator<CompoundEntry> iterator;
-	private CompoundEntry current;
-	private List<CompoundEntry> list;
+	private BaseIterator<CompoundEntry> iterator;
 
 	public CompoundEntryIterator(MainHandler m, List<CompoundEntry> list) {
-		this.list = list;
-		iterator = list.listIterator();
+		iterator = new BaseIterator<CompoundEntry>(list);
 		m_mainHandler = m;
 	}
 
 	public void toFirst() {
-		iterator = list.listIterator();
-		if (iterator.hasNext()) {
-			current = iterator.next();
-		} else {
-			current = null;
-		}
+		iterator.toFirst();
 	}
 
 	public void toLast() {
-		iterator = list.listIterator(list.size() - 1);
-		if (iterator.hasNext()) {
-			current = iterator.next();
-			iterator.previous();
-		} else {
-			current = null;
-		}
+		iterator.toLast();
 	}
 
 	public void toNext() {
-		if (iterator.hasNext()) {
-			current = iterator.next();
-		} else {
-			current = null;
-		}
+		iterator.toNext();
 	}
 
 	public void toPrev() {
-		if (iterator.hasPrevious()) {
-			current = iterator.previous();
-		} else {
-			current = null;
-		}
+		iterator.toPrev();
 	}
 
 	public ICompound current() {
-		CompoundEntry ch = current;
+		CompoundEntry ch = iterator.current();
 		return ch != null ? m_mainHandler.compoundById(ch.id) : null;
 	}
 
-	public void release() {
+	public boolean hasNext() {
+		return iterator.hasNext();
 	}
+
+	public ICompound next() {
+		iterator.next();
+		return current();
+	}
+
+	public boolean hasPrevious() {
+		return iterator.hasPrevious();
+	}
+
+	public ICompound previous() {
+		iterator.previous();
+		return current();
+	}
+
+	public int nextIndex() {
+		return iterator.nextIndex();
+	}
+
+	public int previousIndex() {
+		return iterator.previousIndex();
+	}
+
+	public void remove() {
+		iterator.remove();
+	}
+
+	public void set(ICompound e) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void add(ICompound e) {
+		throw new UnsupportedOperationException();
+	}
+
 
 }

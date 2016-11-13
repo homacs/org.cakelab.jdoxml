@@ -2,10 +2,10 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocCodeLine;
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocMarkup;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.StringDecode;
@@ -76,8 +76,8 @@ public class CodeLineHandler extends BaseHandler<CodeLineHandler> implements IDo
 		}
 	}
 
-	public IDocIterator codeElements() {
-		return new CodeLineIterator(this);
+	public ListIterator<IDoc> codeElements() {
+		return m_children.listIterator();
 	}
 
 	// IDocCodeLine

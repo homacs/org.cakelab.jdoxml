@@ -2,8 +2,27 @@ package org.cakelab.jdoxml.impl.memberhandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.*;
+import org.cakelab.jdoxml.api.ICompound;
+import org.cakelab.jdoxml.api.IDCOP;
+import org.cakelab.jdoxml.api.IDefine;
+import org.cakelab.jdoxml.api.IDocRoot;
+import org.cakelab.jdoxml.api.IEnum;
+import org.cakelab.jdoxml.api.IEnumValue;
+import org.cakelab.jdoxml.api.IFriend;
+import org.cakelab.jdoxml.api.IFunction;
+import org.cakelab.jdoxml.api.ILinkedText;
+import org.cakelab.jdoxml.api.IMember;
+import org.cakelab.jdoxml.api.IMemberReference;
+import org.cakelab.jdoxml.api.IParam;
+import org.cakelab.jdoxml.api.IProperty;
+import org.cakelab.jdoxml.api.IPrototype;
+import org.cakelab.jdoxml.api.ISection;
+import org.cakelab.jdoxml.api.ISignal;
+import org.cakelab.jdoxml.api.ISlot;
+import org.cakelab.jdoxml.api.ITypedef;
+import org.cakelab.jdoxml.api.IVariable;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.StringDecode;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -11,10 +30,8 @@ import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
 import org.cakelab.jdoxml.impl.compoundhandler.CompoundHandler;
 import org.cakelab.jdoxml.impl.dochandler.DocHandler;
 import org.cakelab.jdoxml.impl.linkedtexthandler.LinkedTextHandler;
-import org.cakelab.jdoxml.impl.linkedtexthandler.LinkedTextIterator;
 import org.cakelab.jdoxml.impl.mainhandler.MainHandler;
 import org.cakelab.jdoxml.impl.paramhandler.ParamHandler;
-import org.cakelab.jdoxml.impl.paramhandler.ParamIterator;
 import org.cakelab.jdoxml.impl.sectionhandler.SectionHandler;
 import org.xml.sax.Attributes;
 
@@ -33,7 +50,7 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 
 	// XML elements:
 	// -----------------
-	private List<ParamHandler> m_templateParams = new ArrayList<ParamHandler>(); // templateparamlist
+	private List<IParam> m_templateParams = new ArrayList<IParam>(); // templateparamlist
 	private List<ILinkedText> m_type = new ArrayList<ILinkedText>(); // type
 	private String m_definition; // definition
 	private String m_argsstring; // argsstring
@@ -41,9 +58,9 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 	private String m_read; // read
 	private String m_write; // write
 	private MemberReference m_reimplements; // reimplements
-	private List<MemberReference> m_reimplementedBy = new ArrayList<MemberReference>(); // reimplementedby
-	private List<ParamHandler> m_params = new ArrayList<ParamHandler>(); // param
-	private List<MemberHandler> m_enumValues = new ArrayList<MemberHandler>(); // enumvalue
+	private List<IMemberReference> m_reimplementedBy = new ArrayList<IMemberReference>(); // reimplementedby
+	private List<IParam> m_params = new ArrayList<IParam>(); // param
+	private List<IMember> m_enumValues = new ArrayList<IMember>(); // enumvalue
 	private List<ILinkedText> m_initializer = new ArrayList<ILinkedText>(); // initializer
 	private List<ILinkedText> m_exception = new ArrayList<ILinkedText>(); // exceptions
 	private DocHandler m_brief; // briefdescription
@@ -55,8 +72,8 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 	private String m_bodyFile; // - bodyfile
 	private int m_bodyStart; // - bodystart
 	private int m_bodyEnd; // - bodyend
-	private List<MemberReference> m_references = new ArrayList<MemberReference>(); // references
-	private List<MemberReference> m_referencedBy = new ArrayList<MemberReference>(); // referencedby
+	private List<IMemberReference> m_references = new ArrayList<IMemberReference>(); // references
+	private List<IMemberReference> m_referencedBy = new ArrayList<IMemberReference>(); // referencedby
 
 	// XML attributes:
 	// ---------------
@@ -233,7 +250,7 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 	}
 
 	public void endReferences() {
-		m_references.get(m_references.size() - 1).m_name = m_curString;
+		((MemberReference)m_references.get(m_references.size() - 1)).m_name = m_curString;
 	}
 
 	public void startReferencedBy(Attributes attrib) {
@@ -244,7 +261,7 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 	}
 
 	public void endReferencedBy() {
-		m_referencedBy.get(m_referencedBy.size() - 1).m_name = m_curString;
+		((MemberReference)m_referencedBy.get(m_referencedBy.size() - 1)).m_name = m_curString;
 	}
 
 	public void startReimplements(Attributes attrib) {
@@ -265,7 +282,7 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 	}
 
 	public void endReimplementedBy() {
-		m_reimplementedBy.get(m_reimplementedBy.size() - 1).m_name = m_curString;
+		((MemberReference)m_reimplementedBy.get(m_reimplementedBy.size() - 1)).m_name = m_curString;
 	}
 
 	public void endMember() {
@@ -359,16 +376,16 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 
 	public void initialize(MainHandler mh) {
 
-		for (MemberReference mr : m_references) {
-			mr.initialize(mh);
+		for (IMemberReference mr : m_references) {
+			((MemberReference)mr).initialize(mh);
 		}
 
-		for (MemberReference mr : m_referencedBy) {
-			mr.initialize(mh);
+		for (IMemberReference mr : m_referencedBy) {
+			((MemberReference)mr).initialize(mh);
 		}
 
-		for (MemberReference mr : m_reimplementedBy) {
-			mr.initialize(mh);
+		for (IMemberReference mr : m_reimplementedBy) {
+			((MemberReference)mr).initialize(mh);
 		}
 
 		if (m_reimplements != null)
@@ -392,12 +409,12 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 		return m_section;
 	}
 
-	public IMemberIterator enumValues() {
-		return new MemberIterator(m_enumValues);
+	public ListIterator<IMember> enumValues() {
+		return m_enumValues.listIterator();
 	}
 
-	public ILinkedTextIterator type() {
-		return new LinkedTextIterator(m_type);
+	public ListIterator<ILinkedText> type() {
+		return m_type.listIterator();
 	}
 
 	public String typeString() {
@@ -406,32 +423,32 @@ public class MemberHandler extends BaseHandler<MemberHandler> implements IDefine
 		return m_typeString;
 	}
 
-	public IParamIterator parameters() {
-		return new ParamIterator(m_params);
+	public ListIterator<IParam> parameters() {
+		return m_params.listIterator();
 	}
 
-	public IParamIterator templateParameters() {
-		return m_hasTemplateParamList ? new ParamIterator(m_templateParams) : null;
+	public ListIterator<IParam> templateParameters() {
+		return m_hasTemplateParamList ? m_templateParams.listIterator() : null;
 	}
 
-	public IMemberReferenceIterator references() {
-		return new MemberReferenceIterator(m_references);
+	public ListIterator<IMemberReference> references() {
+		return m_references.listIterator();
 	}
 
-	public IMemberReferenceIterator referencedBy() {
-		return new MemberReferenceIterator(m_referencedBy);
+	public ListIterator<IMemberReference> referencedBy() {
+		return m_referencedBy.listIterator();
 	}
 
-	public ILinkedTextIterator initializer() {
-		return new LinkedTextIterator(m_initializer);
+	public ListIterator<ILinkedText> initializer() {
+		return m_initializer.listIterator();
 	}
 
-	public ILinkedTextIterator exceptions() {
-		return new LinkedTextIterator(m_exception);
+	public ListIterator<ILinkedText> exceptions() {
+		return m_exception.listIterator();
 	}
 
-	public IMemberReferenceIterator reimplementedBy() {
-		return new MemberReferenceIterator(m_reimplementedBy);
+	public ListIterator<IMemberReference> reimplementedBy() {
+		return m_reimplementedBy.listIterator();
 	}
 
 	public IDocRoot briefDescription() {

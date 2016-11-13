@@ -2,10 +2,10 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocHighlight;
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocMarkup;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -66,8 +66,8 @@ public class HighlightHandler extends BaseHandler<HighlightHandler> implements I
 		}
 	}
 
-	public IDocIterator codeElements() {
-		return new HighlightIterator(this);
+	public ListIterator<IDoc> codeElements() {
+		return m_children.listIterator();
 	}
 
 	public Kind kind() {

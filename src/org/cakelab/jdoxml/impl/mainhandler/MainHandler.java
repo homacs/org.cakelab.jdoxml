@@ -2,11 +2,9 @@ package org.cakelab.jdoxml.impl.mainhandler;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.ICompound;
 import org.cakelab.jdoxml.api.ICompoundIterator;
@@ -145,6 +143,7 @@ public class MainHandler extends BaseHandler<MainHandler> implements IDoxygen {
 			ch.parseXML(id);
 		} catch (SAXException | IOException e) {
 			e.printStackTrace();
+			// XXX: not sure if we should throw an exception
 			// compound could not be initialized.
 			return null;
 		}

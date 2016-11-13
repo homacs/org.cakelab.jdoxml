@@ -2,8 +2,8 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocListItem;
 import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.impl.Log;
@@ -47,8 +47,8 @@ public class ListItemHandler extends BaseHandler<ListItemHandler> implements IDo
 		m_children.add(parHandler);
 	}
 
-	public IDocIterator contents() {
-		return new ListItemIterator(this);
+	public ListIterator<IDocPara> contents() {
+		return m_children.listIterator();
 	}
 
 }

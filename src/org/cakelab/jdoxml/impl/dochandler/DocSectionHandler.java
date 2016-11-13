@@ -2,10 +2,10 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocInternal;
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.api.IDocSection;
 import org.cakelab.jdoxml.api.IDocTitle;
 import org.cakelab.jdoxml.impl.Log;
@@ -20,8 +20,8 @@ import org.xml.sax.Attributes;
 public class DocSectionHandler extends BaseHandler<DocSectionHandler> implements IDocSection {
 
 	private IBaseHandler m_parent;
-	List<IDoc> m_paragraphs = new ArrayList<IDoc>();
-	List<IDoc> m_subsections = new ArrayList<IDoc>();
+	List<IDocPara> m_paragraphs = new ArrayList<IDocPara>();
+	List<IDocSection> m_subsections = new ArrayList<IDocSection>();
 	private DocInternalHandler m_internal;
 	private String m_id;
 	private int m_level;
@@ -77,12 +77,12 @@ public class DocSectionHandler extends BaseHandler<DocSectionHandler> implements
 		m_title.startTitle(attrib);
 	}
 
-	public IDocIterator paragraphs() {
-		return new DocSectionParaIterator(this);
+	public ListIterator<IDocPara> paragraphs() {
+		return m_paragraphs.listIterator();
 	}
 
-	public IDocIterator subSections() {
-		return new DocSectionSubIterator(this);
+	public ListIterator<IDocSection> subSections() {
+		return m_subsections.listIterator();
 	}
 
 	public IDocInternal internal() {

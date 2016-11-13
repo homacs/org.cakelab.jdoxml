@@ -1,5 +1,8 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IGraph
 {
-    INodeIterator nodes();
+    ListIterator<INode> nodes();
 }

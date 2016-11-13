@@ -2,17 +2,16 @@ package org.cakelab.jdoxml.impl.paramhandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IDocRoot;
 import org.cakelab.jdoxml.api.ILinkedText;
-import org.cakelab.jdoxml.api.ILinkedTextIterator;
 import org.cakelab.jdoxml.api.IParam;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
 import org.cakelab.jdoxml.impl.dochandler.DocHandler;
 import org.cakelab.jdoxml.impl.linkedtexthandler.LinkedTextHandler;
-import org.cakelab.jdoxml.impl.linkedtexthandler.LinkedTextIterator;
 import org.xml.sax.Attributes;
 
 public class ParamHandler extends BaseHandler<ParamHandler> implements IParam {
@@ -104,12 +103,12 @@ public class ParamHandler extends BaseHandler<ParamHandler> implements IParam {
 		m_brief = docHandler;
 	}
 
-	public ILinkedTextIterator type() {
-		return new LinkedTextIterator(m_type);
+	public ListIterator<ILinkedText> type() {
+		return m_type.listIterator();
 	}
 
-	public ILinkedTextIterator defaultValue() {
-		return new LinkedTextIterator(m_defVal);
+	public ListIterator<ILinkedText> defaultValue() {
+		return m_defVal.listIterator();
 	}
 
 	public IDocRoot briefDescription() {

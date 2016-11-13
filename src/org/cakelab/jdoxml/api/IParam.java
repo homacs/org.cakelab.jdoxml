@@ -1,12 +1,15 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 /** Representation of a parameter of a function. */
 public interface IParam 
 {
-    ILinkedTextIterator type();
+	ListIterator<ILinkedText> type();
     String  declarationName();
     String  definitionName();
     String  attrib();
     String  arraySpecifier();
-    ILinkedTextIterator defaultValue();
+    ListIterator<ILinkedText> defaultValue();
     IDocRoot briefDescription();
 }

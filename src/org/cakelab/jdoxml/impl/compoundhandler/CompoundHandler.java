@@ -2,6 +2,7 @@ package org.cakelab.jdoxml.impl.compoundhandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,10 +16,8 @@ import org.cakelab.jdoxml.impl.graphhandler.GraphHandler;
 import org.cakelab.jdoxml.impl.loamhandler.ListOfAllMembersHandler;
 import org.cakelab.jdoxml.impl.mainhandler.MainHandler;
 import org.cakelab.jdoxml.impl.memberhandler.MemberHandler;
-import org.cakelab.jdoxml.impl.memberhandler.MemberIterator;
 import org.cakelab.jdoxml.impl.paramhandler.TemplateParamListHandler;
 import org.cakelab.jdoxml.impl.sectionhandler.SectionHandler;
-import org.cakelab.jdoxml.impl.sectionhandler.SectionIterator;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -34,15 +33,15 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 	// -------------
 	private String m_name; // compoundname
 	private TitleHandler m_titleHandler; // title
-	private List<RelatedCompound> m_subClasses = new ArrayList<RelatedCompound>(); // basecompoundref
-	private List<RelatedCompound> m_superClasses = new ArrayList<RelatedCompound>(); // derivedcompoundref
-	private List<IncludeHandler> m_includes = new ArrayList<IncludeHandler>(); // includes
-	private List<IncludeHandler> m_includedBy = new ArrayList<IncludeHandler>(); // includedBy
+	private List<IRelatedCompound> m_subClasses = new ArrayList<IRelatedCompound>(); // basecompoundref
+	private List<IRelatedCompound> m_superClasses = new ArrayList<IRelatedCompound>(); // derivedcompoundref
+	private List<IInclude> m_includes = new ArrayList<IInclude>(); // includes
+	private List<IInclude> m_includedBy = new ArrayList<IInclude>(); // includedBy
 	private GraphHandler m_includeDependencyGraph; // incdepgraph
 	private GraphHandler m_includedByDependencyGraph; // invincdepgraph
 	private List<String> m_innerCompounds = new ArrayList<String>(); // innerdir/innerfile/innerclass/innernamespace/innergroup
 	private TemplateParamListHandler m_templateParamList; // templateparamlist
-	private List<SectionHandler> m_sections = new ArrayList<SectionHandler>(); // sectiondef
+	private List<IUserDefined> m_sections = new ArrayList<IUserDefined>(); // sectiondef
 	private DocHandler m_brief; // briefdescription
 	private DocHandler m_detailed; // detaileddescription
 	private GraphHandler m_inheritanceGraph; // inheritancegraph
@@ -67,7 +66,7 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 	private String m_xmlDir; // directory where the info is found
 	private int m_refCount; // object reference counter
 	private Dict<MemberHandler> m_memberDict; // id.member lookup
-	private Dict<List<MemberHandler>> m_memberNameDict; // name.memberlist
+	private Dict<List<IMember>> m_memberNameDict; // name.memberlist
 														// lookup
 	MainHandler m_mainHandler; // parent object
 
@@ -93,7 +92,7 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		m_xmlDir = xmlDir;
 		m_refCount = 1;
 		m_memberDict = new Dict<MemberHandler>(257);
-		m_memberNameDict = new Dict<List<MemberHandler>>(257);
+		m_memberNameDict = new Dict<List<IMember>>(257);
 		m_mainHandler = null;
 
 		addStartHandler("doxygen");
@@ -285,7 +284,8 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 	}
 
 	public void endSuperClass() {
-		m_superClasses.get(m_superClasses.size() - 1).setName(m_curString);
+		RelatedCompound superClass = (RelatedCompound) m_superClasses.get(m_superClasses.size() - 1);
+		superClass.setName(m_curString);
 	}
 
 	public void startSubClass(Attributes attrib) {
@@ -308,7 +308,8 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 	}
 
 	public void endSubClass() {
-		m_subClasses.get(m_subClasses.size() - 1).setName(m_curString);
+		RelatedCompound subClass = (RelatedCompound) m_subClasses.get(m_subClasses.size() - 1);
+		subClass.setName(m_curString);
 	}
 
 	public void startTitle(Attributes attrib) {
@@ -334,8 +335,8 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 
 	public void initialize(MainHandler mh) {
 		m_mainHandler = mh;
-		for (SectionHandler sec : m_sections) {
-			sec.initialize(this);
+		for (IUserDefined ud : m_sections) {
+			((SectionHandler)ud).initialize(this);
 		}
 		if (m_members != null) {
 			m_members.initialize(mh);
@@ -346,9 +347,9 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		m_memberDict.put(mh.id(), mh);
 		mh.initialize(m_mainHandler);
 		// XXX: this looks like a mistake: searching for id in a map with names!
-		List<MemberHandler> mhl = m_memberNameDict.find(mh.id());
+		List<IMember> mhl = m_memberNameDict.find(mh.id());
 		if (mhl == null) {
-			mhl = new ArrayList<MemberHandler>();
+			mhl = new ArrayList<IMember>();
 			m_memberNameDict.insert(mh.name(), mhl);
 		}
 		mhl.add(mh);
@@ -395,16 +396,16 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		}
 	}
 
-	public ISectionIterator sections() {
-		return new SectionIterator(m_sections);
+	public ListIterator<IUserDefined> sections() {
+		return m_sections.listIterator();
 	}
 
-	public IMemberIterator memberByName(String name) {
+	public ListIterator<IMember> memberByName(String name) {
 		// XXX: name() is a single character? and id() as well?
-		List<MemberHandler> ml = m_memberNameDict.get(name);
+		List<IMember> ml = m_memberNameDict.get(name);
 		if (ml == null)
 			return null;
-		return new MemberIterator(ml);
+		return ml.listIterator();
 	}
 
 	public void startInheritanceGraph(Attributes attrib) {
@@ -455,12 +456,12 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		return m_includedByDependencyGraph;
 	}
 
-	public IRelatedCompoundIterator baseCompounds() {
-		return new RelatedCompoundIterator(m_superClasses);
+	public ListIterator<IRelatedCompound> baseCompounds() {
+		return m_superClasses.listIterator();
 	}
 
-	public IRelatedCompoundIterator derivedCompounds() {
-		return new RelatedCompoundIterator(m_subClasses);
+	public ListIterator<IRelatedCompound> derivedCompounds() {
+		return m_subClasses.listIterator();
 	}
 
 	public ICompoundIterator nestedCompounds() {
@@ -471,15 +472,15 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		return m_programListing;
 	}
 
-	public IIncludeIterator includes() {
-		return new IncludeIterator(m_includes);
+	public ListIterator<IInclude> includes() {
+		return m_includes.listIterator();
 	}
 
-	public IIncludeIterator includedBy() {
-		return new IncludeIterator(m_includedBy);
+	public ListIterator<IInclude> includedBy() {
+		return m_includedBy.listIterator();
 	}
 
-	public IParamIterator templateParameters() {
+	public ListIterator<IParam> templateParameters() {
 		return m_templateParamList != null ? m_templateParamList.templateParams() : null;
 	}
 
@@ -487,7 +488,7 @@ public class CompoundHandler extends BaseHandler<CompoundHandler>
 		return m_titleHandler;
 	}
 
-	public IMemberReferenceIterator members() {
+	public ListIterator<IMemberReference> members() {
 		return m_members != null ? m_members.members() : null;
 	}
 

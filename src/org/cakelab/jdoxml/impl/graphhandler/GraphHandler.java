@@ -2,9 +2,10 @@ package org.cakelab.jdoxml.impl.graphhandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IGraph;
-import org.cakelab.jdoxml.api.INodeIterator;
+import org.cakelab.jdoxml.api.INode;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.Dict;
@@ -25,8 +26,8 @@ public class GraphHandler extends BaseHandler<GraphHandler> implements IGraph {
 
 	
 	private IBaseHandler m_parent;
-	List<NodeHandler> m_nodes = new ArrayList<NodeHandler>();
-	private Dict<NodeHandler> m_nodeDict;
+	List<INode> m_nodes = new ArrayList<INode>();
+	private Dict<NodeHandler> m_nodeDict = new Dict<NodeHandler>(1009);
 
 	public GraphHandler(IBaseHandler parent, String endTag)
 
@@ -34,7 +35,6 @@ public class GraphHandler extends BaseHandler<GraphHandler> implements IGraph {
 		m_parent = parent;
 		addEndHandler(endTag, this, "endGraph");
 		addStartHandler("node", this, "startNode");
-		m_nodeDict = new Dict<NodeHandler>(1009);
 	}
 
 	public void startGraph(Attributes attrib) {
@@ -54,8 +54,8 @@ public class GraphHandler extends BaseHandler<GraphHandler> implements IGraph {
 		m_nodeDict.insert(attrib.getValue("id"), n);
 	}
 
-	public INodeIterator nodes() {
-		return new NodeIterator(this);
+	public ListIterator<INode> nodes() {
+		return m_nodes.listIterator();
 	}
 
 	public NodeHandler getNodeById(String id) {

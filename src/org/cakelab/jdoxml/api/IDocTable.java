@@ -1,7 +1,10 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IDocTable extends IDoc
 {
-    IDocIterator rows();
+    ListIterator<IDocRow> rows();
     int numColumns();
     String caption();
 }

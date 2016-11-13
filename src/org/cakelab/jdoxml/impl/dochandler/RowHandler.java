@@ -2,8 +2,9 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocEntry;
 import org.cakelab.jdoxml.api.IDocRow;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
@@ -15,7 +16,7 @@ import org.xml.sax.Attributes;
 // children: entry
 public class RowHandler extends BaseHandler<RowHandler> implements IDocRow {
 	private IBaseHandler m_parent;
-	List<EntryHandler> m_children = new ArrayList<EntryHandler>();
+	List<IDocEntry> m_children = new ArrayList<IDocEntry>();
 
 	public RowHandler(IBaseHandler parent) {
 		m_parent = parent;
@@ -37,8 +38,8 @@ public class RowHandler extends BaseHandler<RowHandler> implements IDocRow {
 		m_children.add(eh);
 	}
 
-	public IDocIterator entries() {
-		return new RowIterator(this);
+	public ListIterator<IDocEntry> entries() {
+		return m_children.listIterator();
 	}
 
 	public Kind kind() {

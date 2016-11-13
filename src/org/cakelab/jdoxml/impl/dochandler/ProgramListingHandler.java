@@ -2,8 +2,9 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
+import org.cakelab.jdoxml.api.IDocCodeLine;
 import org.cakelab.jdoxml.api.IDocProgramListing;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -16,7 +17,7 @@ import org.xml.sax.Attributes;
 // children: codeline, linenumber
 public class ProgramListingHandler extends BaseHandler<ProgramListingHandler> implements IDocProgramListing {
 	private IBaseHandler m_parent;
-	List<CodeLineHandler> m_children = new ArrayList<CodeLineHandler>();
+	List<IDocCodeLine> m_children = new ArrayList<IDocCodeLine>();
 	private boolean m_hasLineNumber;
 
 	public ProgramListingHandler(IBaseHandler parent) {
@@ -51,15 +52,15 @@ public class ProgramListingHandler extends BaseHandler<ProgramListingHandler> im
 			clh = new CodeLineHandler(this);
 			m_children.add(clh);
 		} else {
-			clh = m_children.get(m_children.size() - 1);
+			clh = (CodeLineHandler) m_children.get(m_children.size() - 1);
 		}
 		assert (clh != null);
 		clh.startCodeLine(attrib);
 		m_hasLineNumber = false;
 	}
 
-	public IDocIterator codeLines() {
-		return new ProgramListingIterator(this);
+	public ListIterator<IDocCodeLine> codeLines() {
+		return m_children.listIterator();
 	}
 
 	// IDocProgramListing

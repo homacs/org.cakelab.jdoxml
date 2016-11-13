@@ -1,6 +1,11 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
+import org.cakelab.jdoxml.impl.dochandler.ParameterHandler;
+
 public interface IDocParameterItem extends IDoc
 {
-    IDocIterator paramNames();
+    ListIterator<ParameterHandler> paramNames();
     IDocPara description();
 }

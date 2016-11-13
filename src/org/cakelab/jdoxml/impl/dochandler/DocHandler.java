@@ -2,10 +2,10 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IDoc;
 import org.cakelab.jdoxml.api.IDocInternal;
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocRoot;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
@@ -84,8 +84,8 @@ public class DocHandler extends BaseHandler<DocHandler> implements IDocRoot {
 		m_internal.startInternal(attrib);
 	}
 
-	public IDocIterator contents() {
-		return new DocIterator(this);
+	public ListIterator<IDoc> contents() {
+		return m_children.listIterator();
 	}
 
 	public IDocInternal internal() {

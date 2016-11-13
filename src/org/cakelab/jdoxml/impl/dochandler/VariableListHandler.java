@@ -2,9 +2,10 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocVariableList;
+import org.cakelab.jdoxml.api.IDocVariableListEntry;
 import org.cakelab.jdoxml.impl.Log;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
@@ -16,7 +17,7 @@ import org.xml.sax.Attributes;
 // children: varlistentry, listitem
 public class VariableListHandler extends BaseHandler<VariableListHandler> implements IDocVariableList {
 	private IBaseHandler m_parent;
-	List<VariableListEntryHandler> m_entries = new ArrayList<VariableListEntryHandler>();
+	List<IDocVariableListEntry> m_entries = new ArrayList<IDocVariableListEntry>();
 	private VariableListEntryHandler m_curEntry;
 
 	public VariableListHandler(IBaseHandler parent)
@@ -50,8 +51,8 @@ public class VariableListHandler extends BaseHandler<VariableListHandler> implem
 		m_curEntry.startListItem(attrib);
 	}
 
-	public IDocIterator entries() {
-		return new VariableListIterator(this);
+	public ListIterator<IDocVariableListEntry> entries() {
+		return m_entries.listIterator();
 	}
 
 	public Kind kind() {

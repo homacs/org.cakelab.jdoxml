@@ -11,6 +11,7 @@ public class MemberReference implements IMemberReference {
 	public String m_virtualness;
 	public String m_protection;
 	public String m_ambiguityScope;
+	@SuppressWarnings("unused")
 	private MainHandler m_mainHandler;
 
 	public void initialize(MainHandler mh) {

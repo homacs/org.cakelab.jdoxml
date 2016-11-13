@@ -2,9 +2,9 @@ package org.cakelab.jdoxml.impl.dochandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.IDocItemizedList;
-import org.cakelab.jdoxml.api.IDocIterator;
 import org.cakelab.jdoxml.api.IDocListItem;
 import org.cakelab.jdoxml.impl.basehandler.BaseHandler;
 import org.cakelab.jdoxml.impl.basehandler.IBaseHandler;
@@ -37,8 +37,8 @@ public class ItemizedListHandler extends BaseHandler<ItemizedListHandler> implem
 		m_children.add(liHandler);
 	}
 
-	public IDocIterator elements() {
-		return new ItemizedListIterator(this);
+	public ListIterator<IDocListItem> elements() {
+		return m_children.listIterator();
 	}
 
 	public Kind kind() {

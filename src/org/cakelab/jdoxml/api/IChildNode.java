@@ -1,4 +1,7 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IChildNode
 {
     enum NodeRelation { 
@@ -15,5 +18,5 @@ public interface IChildNode
     INode node();
     NodeRelation relation();
     String relationString();
-    IEdgeLabelIterator edgeLabels();
+    ListIterator<IEdgeLabel> edgeLabels();
 }

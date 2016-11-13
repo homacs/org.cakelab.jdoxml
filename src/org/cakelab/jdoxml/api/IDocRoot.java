@@ -1,6 +1,9 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IDocRoot extends IDoc
 {
-    IDocIterator contents(); 
+    ListIterator<IDoc> contents(); 
     IDocInternal internal(); 
 }

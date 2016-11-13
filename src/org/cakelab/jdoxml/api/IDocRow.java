@@ -1,5 +1,8 @@
 package org.cakelab.jdoxml.api;
+
+import java.util.ListIterator;
+
 public interface IDocRow extends IDoc
 {
-    IDocIterator entries();
+    ListIterator<IDocEntry> entries();
 }
