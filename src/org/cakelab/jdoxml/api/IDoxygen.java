@@ -1,5 +1,6 @@
 package org.cakelab.jdoxml.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ListIterator;
 
@@ -55,5 +56,5 @@ public interface IDoxygen
     /** Reads an XML directory produced by doxygen and builds up a data 
      *  structure representing the contents of the XML files in the directory. 
      */
-    void readXMLDir(String xmlDirName) throws SAXException, IOException;
+    void readXMLDir(File dir) throws SAXException, IOException;
 }

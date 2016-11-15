@@ -1,5 +1,6 @@
 package org.cakelab.jdoxml.examples.metrics;
 
+import java.io.File;
 import java.util.ListIterator;
 
 import org.cakelab.jdoxml.Factory;
@@ -86,7 +87,7 @@ public class Main {
 		dox.setDebugLevel(1);
 
 		try {
-			dox.readXMLDir(argv[1]);
+			dox.readXMLDir(new File(argv[1]));
 		} catch (Throwable e) {
 			System.err.printf("Error reading %s/index.xml\n", argv[1]);
 			e.printStackTrace();
@@ -97,6 +98,9 @@ public class Main {
 		while (cli.hasNext()) {
 			ICompound comp = cli.next();
 			System.out.printf("Processing %s...\n", comp.name());
+			if (comp.name().equals("bAction")) {
+				System.out.println("action");
+			}
 			boolean hasDocs = isDocumented(comp);
 			switch (comp.kind()) {
 			case Class:

@@ -21,6 +21,7 @@ public class DocHandler extends BaseHandler<DocHandler> implements IDocRoot {
 	private IBaseHandler m_parent;
 	List<IDoc> m_children = new ArrayList<IDoc>();
 	private DocInternalHandler m_internal;
+	private String m_text;
 
 	public static TypeNameMapper s_typeMapper;
 	public static HighlightMapper s_highlightMapper;
@@ -59,6 +60,7 @@ public class DocHandler extends BaseHandler<DocHandler> implements IDocRoot {
 	{
 		Log.debug(2, "end dochandler\n");
 		m_parent.setDelegate(null);
+		m_text = super.m_curString;
 	}
 
 	public void startParagraph(Attributes attrib) {
@@ -95,6 +97,11 @@ public class DocHandler extends BaseHandler<DocHandler> implements IDocRoot {
 	@Override
 	public Kind kind() {
 		return Kind.Root;
+	}
+
+	@Override
+	public String text() {
+		return m_text;
 	}
 
 	

@@ -9,7 +9,8 @@ class HighlightMapper
     
     HighlightMapper()
     {
-      m_map.put("comment",        HighlightHandler.HighlightKind.Comment);
+        m_map.put("normal",        HighlightHandler.HighlightKind.Invalid);
+        m_map.put("comment",        HighlightHandler.HighlightKind.Comment);
       m_map.put("keyword",        HighlightHandler.HighlightKind.Keyword);
       m_map.put("keywordtype",    HighlightHandler.HighlightKind.KeywordType);
       m_map.put("keywordflow",    HighlightHandler.HighlightKind.KeywordFlow);

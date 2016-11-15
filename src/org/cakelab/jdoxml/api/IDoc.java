@@ -41,8 +41,12 @@ public interface IDoc
       Symbol,             // 35 -> IDocSymbol
       Internal,           // 36 -> IDocInternal
       Root,               // 37 -> IDocRoot
-      ParameterItem;      // 38 -> IDocParameterItem
-    	
+      ParameterItem, 	  // 38 -> IDocParameterItem
+      NDash,      		  // 38 -> IDocNDash
+      MDash,       		  // 38 -> IDocMDash
+      XRefSect,            // -> IDocXRefSect
+      XRefTitle            // -> IDocXRefTitle
+      ;
     	public int value() {
     		return ordinal();
     	}

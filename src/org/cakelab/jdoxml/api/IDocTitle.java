@@ -5,4 +5,5 @@ import java.util.ListIterator;
 public interface IDocTitle extends IDoc
 {
     ListIterator<IDoc> title();
+    String text();
 }

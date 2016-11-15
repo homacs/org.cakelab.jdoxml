@@ -45,6 +45,8 @@ public ParagraphHandler(IBaseHandler parent)
 
   addStartHandler("linebreak", this, "startLineBreak");
   addStartHandler("hruler", this, "startHRuler");
+  addStartHandler("ndash", this, "startNDash");
+  addStartHandler("mdash", this, "startMDash");
   addStartHandler("programlisting", this, "startProgramListing");
   addStartHandler("verbatim", this, "startVerbatim");
   addStartHandler("indexentry", this, "startIndexEntry");
@@ -64,6 +66,7 @@ public ParagraphHandler(IBaseHandler parent)
   addStartHandler("copydoc", this, "startCopyDoc");
 
   addStartHandler("ref", this, "startRef");
+  addStartHandler("xrefsect", this, "startXRefSect");
   addStartHandler("ulink", this, "startULink");
   addStartHandler("email", this, "startEMail");
   addStartHandler("link", this, "startLink");
@@ -136,6 +139,13 @@ public void startRef(Attributes attrib)
   m_children.add(ref);
 }
 
+public void startXRefSect(Attributes attrib) {
+	  addTextNode();
+	XRefSectHandler handler = new XRefSectHandler(this);
+	handler.start(attrib);
+	m_children.add(handler);
+}
+
 public void startVariableList(Attributes attrib)
 {
   addTextNode();
@@ -149,6 +159,22 @@ public void startHRuler(Attributes attrib)
   addTextNode();
   HRulerHandler hr = new HRulerHandler(this);
   hr.startHRuler(attrib);
+  m_children.add(hr);
+}
+
+public void startNDash(Attributes attrib)
+{
+  addTextNode();
+  NDashHandler hr = new NDashHandler(this);
+  hr.start(attrib);
+  m_children.add(hr);
+}
+
+public void startMDash(Attributes attrib)
+{
+  addTextNode();
+  MDashHandler hr = new MDashHandler(this);
+  hr.start(attrib);
   m_children.add(hr);
 }
 

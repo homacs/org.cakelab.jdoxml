@@ -107,22 +107,17 @@ public class MainHandler extends BaseHandler<MainHandler> implements IDoxygen {
 		}
 	}
 
-	public void readXMLDir(String xmlDirName) throws SAXException, IOException {
-		m_xmlDirName = xmlDirName;
-		String xmlFileName = m_xmlDirName + "/index.xml";
-		File xmlFile = new File(xmlFileName);
-		// printf("Trying %s xmlFile.exists()=%d isReadable()=%d\n",
-		// xmlFileName,xmlFile.exists(),xmlFile.isReadable());
-		if (xmlFile.exists()) {
-			FileInputStream input = new FileInputStream(xmlFile);
-			InputSource source = new InputSource(input);
-			XMLReader reader = XMLReaderFactory.createXMLReader();
-			reader.setContentHandler(this);
-			reader.setErrorHandler(new ErrorHandler());
-			reader.parse(source);
-			dump();
-			input.close();
-		}
+	public void readXMLDir(File xmlDir) throws SAXException, IOException {
+		m_xmlDirName = xmlDir.toString();
+		File xmlFile = new File(xmlDir, "index.xml");
+		FileInputStream input = new FileInputStream(xmlFile);
+		InputSource source = new InputSource(input);
+		XMLReader reader = XMLReaderFactory.createXMLReader();
+		reader.setContentHandler(this);
+		reader.setErrorHandler(new ErrorHandler());
+		reader.parse(source);
+		dump();
+		input.close();
 	}
 
 	public ListIterator<ICompound> compounds() {
@@ -205,10 +200,6 @@ public class MainHandler extends BaseHandler<MainHandler> implements IDoxygen {
 	}
 
 	public void release() {
-		// printf("release()\n");
-		for (CompoundHandler ch : m_compoundsLoaded.values()) {
-			Log.debug(1, "Compound %s not released\n", ch.name());
-		}
 		GraphHandler.exit();
 		DocHandler.exit();
 		MemberHandler.memberhandler_exit();

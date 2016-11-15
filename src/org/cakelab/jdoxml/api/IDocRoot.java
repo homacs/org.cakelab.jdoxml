@@ -5,5 +5,6 @@ import java.util.ListIterator;
 public interface IDocRoot extends IDoc
 {
     ListIterator<IDoc> contents(); 
-    IDocInternal internal(); 
+    IDocInternal internal();
+	String text(); 
 }
