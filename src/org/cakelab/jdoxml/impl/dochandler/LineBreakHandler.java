@@ -9,7 +9,7 @@ import org.xml.sax.Attributes;
 /* \brief Node representing a horizontal ruler
  *
  */
-class LineBreakHandler extends BaseHandler<LineBreakHandler> implements IDocLineBreak {
+public class LineBreakHandler extends BaseHandler<LineBreakHandler> implements IDocLineBreak {
 	private IBaseHandler m_parent;
 
 	public LineBreakHandler(IBaseHandler parent) {
@@ -22,7 +22,7 @@ class LineBreakHandler extends BaseHandler<LineBreakHandler> implements IDocLine
 		Log.debug(2, "Start linebreak\n");
 	}
 
-	void endLineBreak() {
+	public void endLineBreak() {
 		m_parent.setDelegate(null);
 		Log.debug(2, "End linebreak\n");
 	}
