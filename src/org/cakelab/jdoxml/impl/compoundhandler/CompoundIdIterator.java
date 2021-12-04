@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.cakelab.jdoxml.api.ICompound;
-import org.cakelab.jdoxml.impl.baseiterator.BaseIterator;
 import org.cakelab.jdoxml.impl.mainhandler.MainHandler;
 
 class CompoundIdIterator implements ListIterator<ICompound>
 
 {
 	private MainHandler m_mainHandler;
-	private BaseIterator<String> iterator;
+	private ListIterator<String> iterator;
+	private String current;
 
 	
 	CompoundIdIterator(MainHandler m, List<String> list) {
-		iterator = new BaseIterator<String>(list);
+		iterator = list.listIterator();
 		m_mainHandler = m;
 	}
 
@@ -48,35 +48,19 @@ class CompoundIdIterator implements ListIterator<ICompound>
 		iterator.add(e);
 	}
 
-	public void toFirst() {
-		iterator.toFirst();
-	}
-
-	public void toLast() {
-		iterator.toLast();
-	}
-
-	public void toNext() {
-		iterator.toNext();
-	}
-
-	public void toPrev() {
-		iterator.toPrev();
-	}
-
 	public ICompound current() {
-		String id = iterator.current();
+		String id = current;
 		return id != null ? m_mainHandler.compoundById(id) : null;
 	}
 
 	public ICompound next() {
-		iterator.next();
+		current = iterator.next();
 		return current();
 	}
 
 	@Override
 	public ICompound previous() {
-		iterator.previous();
+		current = iterator.previous();
 		return current();
 	}
 

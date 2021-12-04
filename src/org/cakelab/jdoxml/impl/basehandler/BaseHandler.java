@@ -29,6 +29,7 @@ public class BaseHandler<T> extends DefaultHandler implements IBaseHandler {
 	@Override
 	public void startElement(String namespaceURI, String localName, String name, Attributes attrib)
 			throws SAXException {
+		
 		if (m_delegateHandler != null) {
 			m_delegateHandler.startElement(namespaceURI, localName, name, attrib);
 		} else {
