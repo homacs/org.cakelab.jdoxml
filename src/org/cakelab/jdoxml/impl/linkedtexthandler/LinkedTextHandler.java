@@ -61,7 +61,8 @@ public void startRef(Attributes attrib)
   m_ref = new LT_Ref();
   m_ref.setRefId(attrib.getValue("refid"));
   m_ref.setExtId(attrib.getValue("external"));
-  assert (attrib.getValue("kindref")=="compound" || attrib.getValue("kindref")=="member");
+  String kindref = attrib.getValue("kindref");
+  assert (kindref.equals("compound") || kindref.equals("member"));
   m_ref.setTargetKind(attrib.getValue("kindref")=="compound" ? ILT_Ref.TargetKind.Compound : ILT_Ref.TargetKind.Member);
 }
 

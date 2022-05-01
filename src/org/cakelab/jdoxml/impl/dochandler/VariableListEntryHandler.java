@@ -19,12 +19,11 @@ import org.xml.sax.Attributes;
 public class VariableListEntryHandler extends BaseHandler<VariableListEntryHandler> implements IDocVariableListEntry {
 	private IBaseHandler m_parent;
 	private List<ILinkedText> m_term = new ArrayList<ILinkedText>();
-	private ParagraphHandler m_description;
+	private List<ParagraphHandler> paragraphs = new ArrayList<>();
 	private LinkedTextHandler m_linkedTextHandler;
 
 	public VariableListEntryHandler(IBaseHandler parent) {
 		m_parent = parent;
-		m_description = null;
 		m_linkedTextHandler = null;
 		addStartHandler("term", this, "startTerm");
 		addEndHandler("term", this, "endTerm");
@@ -64,9 +63,9 @@ public class VariableListEntryHandler extends BaseHandler<VariableListEntryHandl
 	}
 
 	public void startParagraph(Attributes attrib) {
-		assert (m_description == null);
-		m_description = new ParagraphHandler(this);
-		m_description.startParagraph(attrib);
+		ParagraphHandler para = new ParagraphHandler(this);
+		paragraphs.add(para);
+		para.startParagraph(attrib);
 	}
 
 	public ListIterator<ILinkedText> term() {
@@ -78,7 +77,7 @@ public class VariableListEntryHandler extends BaseHandler<VariableListEntryHandl
 	}
 
 	public IDocPara description() {
-		return m_description;
+		return ParagraphHandler.join(paragraphs);
 	}
 
 }

@@ -1,5 +1,8 @@
 package org.cakelab.jdoxml.impl.dochandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.cakelab.jdoxml.api.IDocPara;
 import org.cakelab.jdoxml.api.IDocXRefSect;
 import org.cakelab.jdoxml.api.IDocXRefTitle;
@@ -14,19 +17,19 @@ import org.xml.sax.Attributes;
 // children: title, para
 public class XRefSectHandler extends BaseHandler<XRefSectHandler> implements IDocXRefSect {
 	private IBaseHandler m_parent;
-	private ParagraphHandler m_paragraph;
+	private List<ParagraphHandler> paragraphs = new ArrayList<ParagraphHandler>();
 	private String m_typeString;
 	private XRefTitleHandler m_title;
 	private Types m_type;
 
 	public XRefSectHandler(IBaseHandler parent) {
 		m_parent = parent;
-		m_paragraph = null;
 		m_title = null;
 		addStartHandler("xreftitle", this, "startTitle");
 		addStartHandler("xrefdescription");
 		addEndHandler("xrefdescription");
 		addStartHandler("para", this, "startParagraph");
+//		addEndHandler("para", this, "endParagraph");
 		addEndHandler("xrefsect", this, "end");
 	}
 
@@ -37,7 +40,6 @@ public class XRefSectHandler extends BaseHandler<XRefSectHandler> implements IDo
 
 	public void end() {
 		m_type = Types.valueOf(m_title.text());
-
 		Log.debug(2, "end xref section (%s)\n", m_type);
 		m_parent.setDelegate(null);
 	}
@@ -49,9 +51,9 @@ public class XRefSectHandler extends BaseHandler<XRefSectHandler> implements IDo
 	}
 
 	public void startParagraph(Attributes attrib) {
-		assert (m_paragraph == null);
-		m_paragraph = new ParagraphHandler(this);
-		m_paragraph.startParagraph(attrib);
+		ParagraphHandler para = new ParagraphHandler(this);
+		para.startParagraph(attrib);
+		paragraphs.add(para);
 	}
 
 	public Kind kind() {
@@ -71,7 +73,7 @@ public class XRefSectHandler extends BaseHandler<XRefSectHandler> implements IDo
 	}
 
 	public IDocPara description() {
-		return m_paragraph;
+		return ParagraphHandler.join(paragraphs);
 	}
 
 }
